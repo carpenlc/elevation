@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xsd:schema version="1.0" targetNamespace="mil:nga:elevation"
+	xmlns:tns="mil:nga:elevation" 
+  xmlns:sec="mil:nga:security" 
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:import namespace="mil:nga:security"
+          schemaLocation="security.xsd">
+  </xsd:import>
+
+  <xsd:complexType name="GeodeticCoordinateBean">
+    <xsd:sequence>
+      <xsd:element name="lon" type="xsd:string" />
+      <xsd:element name="lat" type="xsd:string" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="BboxBean">
+    <xsd:sequence>
+      <xsd:element name="lllon" type="xsd:string"/>
+      <xsd:element name="lllat" type="xsd:string"/>
+      <xsd:element name="urlon" type="xsd:string"/>
+      <xsd:element name="urlat" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="ElevationBean">
+    <xsd:sequence>
+      <xsd:element name="elevation" type="xsd:string"/>
+      <xsd:element name="coordinates" type="tns:GeodeticCoordinateBean"/>
+      <xsd:element name="source" type="xsd:string" />
+      <xsd:element name="marking" type="xsd:string" minOccurs="0"/>    
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="HeightUnitType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="METERS"/>
+      <xsd:enumeration value="FEET"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:simpleType name="TerrainDataType">
+    <xsd:restriction base="xsd:string">
+      <xsd:enumeration value="DTED2"/>
+      <xsd:enumeration value="DTED1"/>
+      <xsd:enumeration value="DTED0"/>
+      <xsd:enumeration value="SRTM2"/>
+      <xsd:enumeration value="SRTM1"/>
+      <xsd:enumeration value="SRTM2F"/>
+      <xsd:enumeration value="SRTM1F"/>
+      <xsd:enumeration value="BEST"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="GetElevationAt">
+    <xsd:sequence>
+      <xsd:element name="pts" type="tns:GeodeticCoordinateBean" minOccurs="0" maxOccurs="unbounded" />
+      <xsd:element name="terrainDataType" type="tns:TerrainDataType" minOccurs="0" />
+      <xsd:element name="heightType" type="tns:HeightUnitType" minOccurs="0" />
+      <xsd:element name="security" type="sec:SecurityElement" minOccurs="0" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="GetElevationAtResponse">
+    <xsd:sequence>
+      <xsd:element name="security" type="sec:SecurityElement" minOccurs="1" maxOccurs="1" nillable="false" />
+      <xsd:element name="heightType" type="tns:HeightUnitType" minOccurs="1" maxOccurs="1" nillable="false" />
+      <xsd:element name="elevations" type="tns:ElevationBean" minOccurs="1" maxOccurs="unbounded" nillable="false"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="GetMinMaxElevations">
+    <xsd:sequence>
+      <xsd:element name="bbox" type="tns:BboxBean" minOccurs="0" />
+      <xsd:element name="terrainDataType" type="tns:TerrainDataType" minOccurs="0" />
+      <xsd:element name="heightType" type="tns:HeightUnitType" minOccurs="0" />
+      <xsd:element name="security" type="sec:SecurityElement" minOccurs="0" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="GetMinMaxElevationsResponse">
+    <xsd:sequence>
+      <xsd:element name="security" type="sec:SecurityElement" minOccurs="1" maxOccurs="1" nillable="false" />
+      <xsd:element name="heightType" type="tns:HeightUnitType" minOccurs="1" />
+      <xsd:element name="minElevation" type="tns:ElevationBean" minOccurs="1" />
+      <xsd:element name="maxElevation" type="tns:ElevationBean" minOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="GetMinMaxElevationsWKT">
+    <xsd:sequence>
+      <xsd:element name="wkt" type="xsd:string" minOccurs="0" />
+      <xsd:element name="terrainDataType" type="tns:TerrainDataType" minOccurs="0" />
+      <xsd:element name="heightType" type="tns:HeightUnitType" minOccurs="0" />
+      <xsd:element name="security" type="sec:SecurityElement" minOccurs="0" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="GetMinMaxElevationsWKTResponse">
+    <xsd:sequence>
+      <xsd:element name="security" type="sec:SecurityElement" minOccurs="1" maxOccurs="1" nillable="false" />
+      <xsd:element name="heightType" type="tns:HeightUnitType" minOccurs="1" />
+      <xsd:element name="minElevation" type="tns:ElevationBean" minOccurs="1" />
+      <xsd:element name="maxElevation" type="tns:ElevationBean" minOccurs="1" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+
+  <xsd:element name="nga_resource" type="xsd:string" />
+  <xsd:element name="description_document" type="xsd:string" />
+
+  <xsd:element name="GetElevationAt" type="tns:GetElevationAt"/>
+  <xsd:element name="GetElevationAtResponse" type="tns:GetElevationAtResponse"/>
+  <xsd:element name="GetMinMaxElevations" type="tns:GetMinMaxElevations"/>
+  <xsd:element name="GetMinMaxElevationsResponse" type="tns:GetMinMaxElevationsResponse"/>
+  <xsd:element name="GetMinMaxElevationsWKT" type="tns:GetMinMaxElevationsWKT"/>
+  <xsd:element name="GetMinMaxElevationsWKTResponse" type="tns:GetMinMaxElevationsWKTResponse"/>
+
+</xsd:schema>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="mil:nga:elevation"
+	xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+	xmlns:tns="mil:nga:elevation" 
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" 
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 	
+	name="ElevationService">
+  <wsdl:documentation>
+    <tns:nga_resource>./nga_resource.xml</tns:nga_resource>
+    <tns:description_document>./description_document.html</tns:description_document>
+  </wsdl:documentation>
+  <wsdl:types>
+    <xsd:schema>
+      <xsd:import 
+			  namespace="mil:nga:elevation" 
+			  schemaLocation="elevation_service.xsd"/>
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="getElevationAtMsg">
+    <wsdl:part name="parameters" element="tns:GetElevationAt"/>
+  </wsdl:message>
+  <wsdl:message name="getElevationAtResponseMsg">
+    <wsdl:part name="result" element="tns:GetElevationAtResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getMinMaxElevationsMsg">
+    <wsdl:part name="parameters" element="tns:GetMinMaxElevations"/>
+  </wsdl:message>
+  <wsdl:message name="getMinMaxElevationsResponseMsg">
+    <wsdl:part name="result" element="tns:GetMinMaxElevationsResponse"/>
+  </wsdl:message>
+  <wsdl:message name="getMinMaxElevationsWKTMsg">
+    <wsdl:part name="parameters" element="tns:GetMinMaxElevationsWKT"/>
+  </wsdl:message>
+  <wsdl:message name="getMinMaxElevationsWKTResponseMsg">
+    <wsdl:part name="result" element="tns:GetMinMaxElevationsWKTResponse"/>
+  </wsdl:message>
+  <wsdl:portType name="Elevation">
+    <wsdl:operation name="getElevationAt">
+      <wsdl:input message="tns:getElevationAtMsg"/>
+      <wsdl:output message="tns:getElevationAtResponseMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getMinMaxElevations">
+      <wsdl:input message="tns:getMinMaxElevationsMsg"/>
+      <wsdl:output message="tns:getMinMaxElevationsResponseMsg"/>
+    </wsdl:operation>
+    <wsdl:operation name="getMinMaxElevationsWKT">
+      <wsdl:input message="tns:getMinMaxElevationsWKTMsg"/>
+      <wsdl:output message="tns:getMinMaxElevationsWKTResponseMsg"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ElevationServicePortBinding" type="tns:Elevation">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+    <wsdl:operation name="getElevationAt">
+      <soap:operation soapAction=""/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMinMaxElevations">
+      <soap:operation soapAction=""/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="getMinMaxElevationsWKT">
+      <soap:operation soapAction=""/>
+      <wsdl:input>
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="elevation_service">
+    <wsdl:port name="ElevationServicePort" binding="tns:ElevationServicePortBinding">
+      <soap:address location="PUT ACTUAL ADDRESS HERE" 
+        xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" 
+        xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
