@@ -1,5 +1,7 @@
 package mil.nga.npd;
 
+import java.io.Serializable;
+
 import mil.nga.elevation.GeodeticCoordinateBean;
 
 /**
@@ -9,8 +11,13 @@ import mil.nga.elevation.GeodeticCoordinateBean;
  * 
  * @author L. Craig Carpenter
  */
-public class GeodeticCoordinate {
+public class GeodeticCoordinate implements Serializable {
 
+	/**
+	 * Eclipse-generated serialVersionUID
+	 */
+	private static final long serialVersionUID = -7545583693002322759L;
+	
 	private final double lat;
 	private final double lon;
 	
@@ -66,7 +73,7 @@ public class GeodeticCoordinate {
 	
     /**
      * Static inner class implementing the builder creation pattern for 
-     * objects of type GeodeticCoordinate.
+     * objects of type <code>GeodeticCoordinate</code>.
      * 
      * @author L. Craig Carpenter
      */

@@ -97,6 +97,14 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link CoordinateAccuracyBean }
+     * 
+     */
+    public CoordinateAccuracyBean createCoordinateAccuracyBean() {
+        return new CoordinateAccuracyBean();
+    }
+
+    /**
      * Create an instance of {@link BboxBean }
      * 
      */

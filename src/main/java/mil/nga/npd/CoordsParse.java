@@ -36,6 +36,7 @@ public class CoordsParse {
     
     /**
      * Determine whether or not the input String is a valid numeric value.
+     * 
      * @param s A potential numeric String.
      * @return True if the input String is numeric, false otherwise.
      */
@@ -43,7 +44,8 @@ public class CoordsParse {
         boolean isNum = true;
         try {
             Double.valueOf(s).doubleValue();
-        } catch (NumberFormatException e) {
+        } 
+        catch (NumberFormatException e) {
             isNum = false;
         }
         return isNum;

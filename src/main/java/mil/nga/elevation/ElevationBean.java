@@ -19,6 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence&gt;
  *         &lt;element name="elevation" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="coordinates" type="{mil:nga:elevation}GeodeticCoordinateBean"/&gt;
+ *         &lt;element name="accuracy" type="{mil:nga:elevation}CoordinateAccuracyBean"/&gt;
  *         &lt;element name="source" type="{http://www.w3.org/2001/XMLSchema}string"/&gt;
  *         &lt;element name="marking" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
@@ -33,6 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ElevationBean", propOrder = {
     "elevation",
     "coordinates",
+    "accuracy",
     "source",
     "marking"
 })
@@ -42,6 +44,8 @@ public class ElevationBean {
     protected String elevation;
     @XmlElement(required = true)
     protected GeodeticCoordinateBean coordinates;
+    @XmlElement(required = true)
+    protected CoordinateAccuracyBean accuracy;
     @XmlElement(required = true)
     protected String source;
     protected String marking;
@@ -92,6 +96,30 @@ public class ElevationBean {
      */
     public void setCoordinates(GeodeticCoordinateBean value) {
         this.coordinates = value;
+    }
+
+    /**
+     * Gets the value of the accuracy property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link CoordinateAccuracyBean }
+     *     
+     */
+    public CoordinateAccuracyBean getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the value of the accuracy property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link CoordinateAccuracyBean }
+     *     
+     */
+    public void setAccuracy(CoordinateAccuracyBean value) {
+        this.accuracy = value;
     }
 
     /**
