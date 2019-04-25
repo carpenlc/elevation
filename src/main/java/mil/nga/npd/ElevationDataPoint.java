@@ -28,7 +28,46 @@ public class ElevationDataPoint implements Serializable {
 		units      = builder.units;
 	}
 	
+	/**
+	 * Getter method for the elevation value associated with a given lat/lon
+	 * pair.
+	 * @return The elevation value.
+	 */
+	public int getElevation() {
+		return elevation;
+	}
 	
+	public double getLat() {
+		return coordinate.getLat();
+	}
+	
+	public double getLon() {
+		return coordinate.getLon();
+	}
+	
+	/**
+	 * Getter method for the length units associated with the elevation  value associated with a given lat/lon
+	 * pair.
+	 * @return The elevation value.
+	 */
+	public HeightUnitType getUnits() {
+		return units;
+	}
+	
+ 	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("ElevationDataPoint : Lat => [ ");
+		sb.append(getLat());
+		sb.append(" ], Lon => [ ");
+		sb.append(getLon());
+		sb.append(" ], elevation => [ ");
+		sb.append(getElevation());
+		sb.append(" ] ");
+		sb.append(getUnits().name());
+		sb.append(".  ");
+		sb.append(accuracy.toString());
+		return sb.toString();
+	}
     /**
      * Static inner class implementing the builder creation pattern for 
      * objects of type <code>ElevationDataPoint</code>.

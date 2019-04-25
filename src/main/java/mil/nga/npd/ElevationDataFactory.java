@@ -11,6 +11,7 @@ import com.bbn.openmap.dataAccess.dted.DTEDFrame;
 
 import mil.nga.elevation.HeightUnitType;
 import mil.nga.elevation.TerrainDataType;
+import mil.nga.npd.exceptions.InvalidParameterException;
 
 /**
  * This class is responsible for retrieving the requested elevation data 
@@ -46,56 +47,74 @@ public class ElevationDataFactory implements Constants {
 	 * This method obtains the elevation and associated accuracy data 
 	 * associated with the input geodetic coordinate.  The method uses 
 	 * the third party com.bbn.openmap API for reading the target DEM.
+	 * It has been modified from the legacy version to return the 
+	 * interpolated elevation of the target point rather than the 
+	 * elevation of the closest southwest post. 
 	 * 
 	 * @param coordinate The target coordinate that we wish to find the 
 	 * elevation value for.
 	 * @return A <code>ElevationDataPoint<code> data structure containing 
 	 * the elevation information and associated accuracy data.
+	 * @throws InvalidParameterException Thrown if the input coordinate 
+	 * is null.
 	 */
-	public ElevationDataPoint getElevationAt(GeodeticCoordinate coordinate) {
+	public ElevationDataPoint getElevationAt(GeodeticCoordinate coordinate) 
+			throws InvalidParameterException,IllegalStateException {
 		
-		long      startTime = System.currentTimeMillis();
-		DTEDFrame frame     = null;
-		ElevationDataPoint result = null;
+		long               startTime = System.currentTimeMillis();
+		DTEDFrame          frame     = null;
+		ElevationDataPoint result    = null;
 		
-		try {
+		if (coordinate != null) {
+			try {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Loading DEM frame file [ "
+							+ getFilePath()
+							+ " ].");
+				}
+				frame = new DTEDFrame(getFilePath());
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("DEM frame file [ "
+							+ getFilePath()
+							+ " ] loaded in [ "
+							+ (System.currentTimeMillis() - startTime)
+							+ " ] ms.");
+				}
+				result = new ElevationDataPoint.ElevationDataPointBuilder()
+						.units(getUnits())
+						.withGeodeticCoordinate(coordinate)
+						.withDEMFrameAccuracy(
+								new DEMFrameAccuracy.DEMFrameAccuracyBuilder()
+									.absHorzAccuracy(frame.acc.abs_horz_acc)
+									.absVertAccuracy(frame.acc.abs_vert_acc)
+									.relHorzAccuracy(frame.acc.rel_horz_acc)
+									.relVertAccuracy(frame.acc.rel_vert_acc)
+									.units(getUnits())
+									.build())
+						.elevation(frame.interpElevationAt(
+								(float)coordinate.getLat(), 
+								(float)coordinate.getLon()))
+						.build();
+			}
+			finally {
+				if (frame != null) {
+					frame.close(true);
+				}
+			}
 			
 			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Loading DEM frame file [ "
-						+ getFilePath()
-						+ " ].");
-			}
-			
-			frame = new DTEDFrame(getFilePath());
-			result = new ElevationDataPoint.ElevationDataPointBuilder()
-					.units(getUnits())
-					.withGeodeticCoordinate(coordinate)
-					.withDEMFrameAccuracy(
-							new DEMFrameAccuracy.DEMFrameAccuracyBuilder()
-								.absHorzAccuracy(frame.acc.abs_horz_acc)
-								.absVertAccuracy(frame.acc.abs_vert_acc)
-								.relHorzAccuracy(frame.acc.rel_horz_acc)
-								.relVertAccuracy(frame.acc.rel_vert_acc)
-								.units(getUnits())
-								.build())
-					.elevation(frame.interpElevationAt(
-							(float)coordinate.getLat(), 
-							(float)coordinate.getLon()))
-					.build();
-
-		}
-		finally {
-			if (frame != null) {
-				frame.close(true);
+				LOGGER.debug("Elevation data for type [ "
+						+ getSourceType().name()
+						+ " ] retrieved in [ "
+						+ (System.currentTimeMillis() - startTime)
+						+ " ] ms.");
 			}
 		}
-		
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Elevation data for type [ "
-					+ getSourceType().name()
-					+ " ] retrieved in [ "
-					+ (System.currentTimeMillis() - startTime)
-					+ " ] ms.");
+		else {
+			LOGGER.error("The input geodetic coordinate is null.  Throwing a "
+					+ "InvalidParameterException to the caller.");
+			throw new InvalidParameterException(
+					"Input geodetic coordinate is null.");
 		}
 		return result;
 	}
@@ -199,10 +218,25 @@ public class ElevationDataFactory implements Constants {
 						+ obj.getFilePath()
 						+ " ] does not exist.");
 			}
-			
-			
 		}
 	}
 	
-
+	public static void main(String[] args) {
+		try {
+			ElevationDataFactory factory = new ElevationDataFactory.ElevationDataFactoryBuilder()
+					.filePath("/mnt/terrain/srtm/srtmf/srt2f_1/srtf280/dted/w069/s15.dt2")
+					.units(HeightUnitType.METERS)
+					.sourceType(TerrainDataType.SRTM_2_F)
+					.build();
+			GeodeticCoordinate coord = new GeodeticCoordinate.GeodeticCoordinateBuilder()
+					.lat(-14.123)
+					.lon(-68.555)
+					.build();
+			ElevationDataPoint point = factory.getElevationAt(coord);
+			System.out.println(point.toString());
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
