@@ -90,6 +90,19 @@ public class TerrainDataFileService {
     	return sb.toString();
     }
     
+    /** 
+     * Convenience method allowing callers to retrieve the list of terrain
+     * data files associated with a <code>GeodeticCoordinate</code> object.
+     * 
+     * @param coord
+     * @param source
+     * @return
+     */
+    public List<TerrainDataFile> getTerrainDataFiles(
+    		GeodeticCoordinate coord, 
+    		TerrainDataType source) {
+    	return getTerrainDataFiles(coord.getLat(), coord.getLon(), source);
+    }
     /**
      * 
      * @param lat
@@ -110,8 +123,8 @@ public class TerrainDataFileService {
     	
     	if (em != null) {
     		CriteriaBuilder cb = em.getCriteriaBuilder();
-    		CriteriaQuery<TerrainDataFile> cq   = cb.createQuery(TerrainDataFile.class);
-    		Root<TerrainDataFile>          root = cq.from(TerrainDataFile.class);
+    		CriteriaQuery<TerrainDataFile> cq = cb.createQuery(TerrainDataFile.class);
+    		Root<TerrainDataFile> root = cq.from(TerrainDataFile.class);
     		cq.select(root);
     		ParameterExpression<String> latExpression = cb.parameter(String.class, "LAT");
     		ParameterExpression<String> lonExpression = cb.parameter(String.class, "LON");

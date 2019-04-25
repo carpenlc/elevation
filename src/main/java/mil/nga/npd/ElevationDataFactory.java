@@ -29,7 +29,8 @@ public class ElevationDataFactory implements Constants {
             LoggerFactory.getLogger(ElevationDataFactory.class);
     
     private final String          filePath;
-	private final TerrainDataType sourceType;
+	private final String          classificationMarking;
+    private final TerrainDataType sourceType;
 	private final HeightUnitType  units;
 	
 	/**
@@ -38,9 +39,10 @@ public class ElevationDataFactory implements Constants {
 	 * internal parameters.
 	 */
     protected ElevationDataFactory(ElevationDataFactoryBuilder builder) {
-    	filePath   = builder.filePath;
-    	sourceType = builder.sourceType;
-    	units      = builder.units;
+    	filePath              = builder.filePath;
+    	sourceType            = builder.sourceType;
+    	units                 = builder.units;
+    	classificationMarking = builder.classificationMarking;
     }
     
 	/**
@@ -59,7 +61,7 @@ public class ElevationDataFactory implements Constants {
 	 * is null.
 	 */
 	public ElevationDataPoint getElevationAt(GeodeticCoordinate coordinate) 
-			throws InvalidParameterException,IllegalStateException {
+			throws InvalidParameterException, IllegalStateException {
 		
 		long               startTime = System.currentTimeMillis();
 		DTEDFrame          frame     = null;
@@ -82,6 +84,7 @@ public class ElevationDataFactory implements Constants {
 				}
 				result = new ElevationDataPoint.ElevationDataPointBuilder()
 						.units(getUnits())
+						.classificationMarking(classificationMarking)
 						.withGeodeticCoordinate(coordinate)
 						.withDEMFrameAccuracy(
 								new DEMFrameAccuracy.DEMFrameAccuracyBuilder()
@@ -152,6 +155,7 @@ public class ElevationDataFactory implements Constants {
 	public static class ElevationDataFactoryBuilder {
 		
 		private String          filePath;
+		private String          classificationMarking = "";
 		private TerrainDataType sourceType;
 		private HeightUnitType  units = HeightUnitType.METERS;
 		
@@ -170,6 +174,16 @@ public class ElevationDataFactory implements Constants {
 						+ "is null or empty.");
 			}
 			filePath = value;
+			return this;
+		}
+		
+		/**
+		 * Setter method for the source classification marking.
+		 * @param value The source classification marking.
+		 * @return Reference to the builder object.
+		 */
+		public ElevationDataFactoryBuilder classificationMarking(String value) {
+			classificationMarking = value;
 			return this;
 		}
 		
