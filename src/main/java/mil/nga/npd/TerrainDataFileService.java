@@ -170,6 +170,10 @@ public class TerrainDataFileService {
     			
     		}
     	}
+    	else {
+    		LOGGER.error("Hibernate not initialized.  "
+    				+ "Output list will be null.");
+    	}
     	return result;
     }
 }

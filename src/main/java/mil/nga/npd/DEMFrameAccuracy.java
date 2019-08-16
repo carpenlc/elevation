@@ -5,6 +5,9 @@ import java.io.Serializable;
 import mil.nga.elevation.HeightUnitType;
 
 /**
+ * Data structure used to hold the accuracy information associated with 
+ * a DTED frame.
+ * 
  * The accuracy data in the target DTED frame consists of 4 4-byte fields 
  * that can contain 0-9999 (in meters) or "NA".  If the accuracy field 
  * has "NA" or "N/A" the openmap API will set the field to -1.  If unit 

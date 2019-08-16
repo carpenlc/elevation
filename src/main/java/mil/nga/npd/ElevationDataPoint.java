@@ -88,7 +88,7 @@ public class ElevationDataPoint implements Serializable, Constants {
 		sb.append(getUnits().name());
 		sb.append(" ], classification marking => [ ");
 		sb.append(getClassificationMarking());
-		sb.append(" ]  ");
+		sb.append(" ] ");
 		sb.append(accuracy.toString());
 		return sb.toString();
 	}
@@ -174,6 +174,10 @@ public class ElevationDataPoint implements Serializable, Constants {
 		public ElevationDataPoint build() {
 			if (units == HeightUnitType.FEET) {
 				elevation = Constants.convertToFeet(elevation);
+			}
+			if ((classificationMarking == null) || 
+					classificationMarking.isEmpty()) {
+				classificationMarking = DEFAULT_CLASSIFICATION_MARKING;
 			}
 			ElevationDataPoint point = new ElevationDataPoint(this);
 			validate(point);

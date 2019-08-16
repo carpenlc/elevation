@@ -86,7 +86,7 @@ public class ElevationService implements Elevation, Constants {
 		}
 		
 		// Loop through the user-supplied list of coordinates.
-		for(GeodeticCoordinateBean coordBean: parameters.getPts()) {
+		for (GeodeticCoordinateBean coordBean: parameters.getPts()) {
 			
 			// Since the WSDL specifies the coordinates are in String format, 
 			// convert them to primitives for further processing.
@@ -97,7 +97,8 @@ public class ElevationService implements Elevation, Constants {
 			
 			// Retrieve a list of source DEM files that can be used to 
 			// calculate the requested data.
-			List<TerrainDataFile> demFiles = new TerrainDataFileService().getTerrainDataFiles(
+			List<TerrainDataFile> demFiles = 
+					new TerrainDataFileService().getTerrainDataFiles(
 							coord, source);
 					
 			// The DEM files are returned in worst-to-best quality order.  
@@ -129,7 +130,6 @@ public class ElevationService implements Elevation, Constants {
 				}
 			}
 		}
-
 
 		// TODO Auto-generated method stub
 		return null;

@@ -49,9 +49,10 @@ public class ElevationDataFactory implements Constants {
 	 * This method obtains the elevation and associated accuracy data 
 	 * associated with the input geodetic coordinate.  The method uses 
 	 * the third party com.bbn.openmap API for reading the target DEM.
-	 * It has been modified from the legacy version to return the 
-	 * interpolated elevation of the target point rather than the 
-	 * elevation of the closest southwest post. 
+	 * This method has been modified from the legacy version to return 
+	 * the interpolated elevation of the target point rather than the 
+	 * elevation of the closest southwest post.  In the vast majority 
+	 * of cases this results in a more accurate elevation measurement.
 	 * 
 	 * @param coordinate The target coordinate that we wish to find the 
 	 * elevation value for.
@@ -94,9 +95,10 @@ public class ElevationDataFactory implements Constants {
 									.relVertAccuracy(frame.acc.rel_vert_acc)
 									.units(getUnits())
 									.build())
-						.elevation(frame.interpElevationAt(
-								(float)coordinate.getLat(), 
-								(float)coordinate.getLon()))
+						.elevation(
+								frame.interpElevationAt(
+										(float)coordinate.getLat(), 
+										(float)coordinate.getLon()))
 						.build();
 			}
 			finally {

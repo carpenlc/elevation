@@ -31,6 +31,11 @@ public interface Constants {
 	public static final int MAX_ALLOWABLE_POINTS = 20;
 	
 	/**
+	 * If classification is not set, mark it limited distribution.
+	 */
+	public static final String DEFAULT_CLASSIFICATION_MARKING = "LIMDIS";
+	
+	/**
 	 * Default method used to convert meters to feet.
 	 * 
 	 * @param meters The number of meters.
